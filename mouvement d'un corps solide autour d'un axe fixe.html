@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mouvement de Rotation - Cours Interactif</title>
+    <!-- FontAwesome icons for WhatsApp and Arrows -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- MathJax for Physics/Math formulas -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #eef2f5;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+        .container {
+            max-width: 950px;
+            margin: 0 auto;
+        }
+        /* Bourdure w Cadre خاص بكل صفحة (Page Section) */
+        .page-section {
+            display: none; 
+            background: #fff;
+            padding: 40px;
+            border-radius: 16px;
+            border: 4px solid #0275d8; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+            animation: fadeIn 0.4s ease-in-out;
+        }
+        .page-section.active {
+            display: block; 
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        h2 {
+            color: #d9534f;
+            border-bottom: 3px solid #d9534f;
+            padding-bottom: 12px;
+            font-size: 24px;
+        }
+        h3 {
+            color: #0275d8;
+            margin-top: 30px;
+            font-size: 20px;
+        }
+        .image-card {
+            background: #f9fbfd;
+            border: 2px dashed #bce8f1;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 25px 0;
+            text-align: center;
+        }
+        .image-card img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .image-caption {
+            font-size: 15px;
+            color: #555;
+            margin-top: 10px;
+            font-style: italic;
+            font-weight: bold;
+        }
+
+        /* --- RELATIONS W LES FORMULES KBARE W INTERACTIFIN --- */
+        .formula-box {
+            background: #fff;
+            border: 3px solid #0275d8;
+            padding: 18px 25px;  
+            margin: 14px 0;
+            border-radius: 10px;
+            display: inline-block;
+            font-weight: bold;
+            font-size: 22px;     
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0,117,216,0.15);
+        }
+        .formula-box:hover {
+            background-color: #e6f2ff;
+            border-color: #014c8c;
+            transform: scale(1.06);
+            box-shadow: 0 8px 16px rgba(0,117,216,0.25);
+        }
+        .formula-box.highlight {
+            background-color: #d1e7dd;
+            border-color: #0f5132;
+            color: #0f5132;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            background: #fff;
+        }
+        th, td {
+            border: 2px solid #dcdcdc;
+            padding: 15px;
+            text-align: center;
+            font-size: 18px;
+        }
+        th {
+            background-color: #f1f5f9;
+            color: #333;
+            font-size: 19px;
+        }
+        .summary-table td {
+            font-size: 20px;     
+            font-weight: bold;
+            background: #fff;
+            transition: background 0.2s;
+        }
+        .summary-table td:hover {
+            background-color: #fff3cd;
+            cursor: pointer;
+        }
+        .graphs-section {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin: 25px 0;
+        }
+        .graph-box {
+            background: #fafafa;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            width: 45%;
+            min-width: 280px;
+            text-align: center;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.06);
+        }
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            border-top: 2px solid #eee;
+            padding-top: 25px;
+        }
+        .btn {
+            background-color: #0275d8;
+            color: white;
+            padding: 14px 28px;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 17px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: background 0.3s, transform 0.2s;
+        }
+        .btn:hover {
+            background-color: #025aa5;
+            transform: translateY(-2px);
+        }
+        /* WhatsApp Floating Icon */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            background-color: #25d366;
+            color: white;
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            text-align: center;
+            font-size: 38px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: transform 0.3s;
+        }
+        .whatsapp-float:hover {
+            transform: scale(1.15);
+        }
+        
+        .hint-text {
+            font-size: 14px;
+            color: #d9534f;
+            margin-bottom: 15px;
+            font-weight: bold;
+            background: #fdf7f7;
+            padding: 10px;
+            border-radius: 8px;
+            border-left: 5px solid #d9534f;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="hint-text">💡 اضغط على أي علاقة أو قانون لتفعيل خاصية التفاعل (Highlight)!</div>
+
+    <!-- ================= PAGE 1 ================= -->
+    <div id="page1" class="page-section active">
+        <h2>Mouvement de rotation d'un solide autour d'un axe fixe</h2>
+        <p style="font-size: 18px;"><strong>1-</strong> On considère un solide (s) en rotation autour d'un axe fixe \((\Delta)\), chaque point M décrit un mouvement circulaire autour de l'axe \((\Delta)\).</p>
+        <p style="font-size: 18px;">Pour étudier le mouvement d'un point M du corps (s), on considère un Repère \((O, \vec{i}, \vec{j}, \vec{k})\).</p>
+        <p style="font-size: 18px;">On peut repérer la position de M de deux façons différentes :</p>
+        
+        <h3>• L'abscisse curviligne :</h3>
+        <div><div class="formula-box" onclick="toggleHighlight(this)">\(S = \widehat{M_0M}\) ; en (m)</div></div>
+
+        <h3>• L'abscisse angulaire :</h3>
+        <div><div class="formula-box" onclick="toggleHighlight(this)">\(\theta = (\widehat{OM_0, OM})\) ; en (rad)</div></div>
+
+        <h3>• Relation entre l'abscisse curviligne et l'abscisse angulaire :</h3>
+        <div><div class="formula-box" onclick="toggleHighlight(this)">\(S = R \cdot \theta\)</div></div>
+        <p style="font-size: 18px;">Avec : \(s\) en (m), \(R\) en (m), \(\theta\) en (rad).</p>
+
+        <!-- Image 1 في الصفحة الأولى -->
+        <div class="image-card">
+            <img src="image1.jpg" alt="Schéma du mouvement de rotation - Page 1">
+            <div class="image-caption">Repérage d'un point M par l'abscisse curviligne et angulaire</div>
+        </div>
+
+        <h3>• La vitesse angulaire moyenne :</h3>
+        <div><div class="formula-box" onclick="toggleHighlight(this)">\(\omega = \frac{\Delta\theta}{\Delta t} = \frac{\theta_f - \theta_i}{t_f - t_i}\)</div></div>
+        <p style="font-size: 18px;">Avec : \(\omega\) en (\(rad \cdot s^{-1}\)), \(\Delta\theta\) en (rad), \(\Delta t\) en (s).</p>
+
+        <h3>• La Vitesse angulaire instantanée à l'instant \(t_i\) :</h3>
+        <div><div class="formula-box" onclick="toggleHighlight(this)">\(\omega_i = \frac{\theta_{i+1} - \theta_{i-1}}{t_{i+1} - t_{i-1}}\)</div></div>
+        <p style="font-size: 18px;">Avec : \(\omega\) en (\(rad \cdot s^{-1}\)).</p>
+
+        <div class="nav-buttons" style="justify-content: flex-end;">
+            <button class="btn" onclick="changePage(2)">Page Suivante <i class="fa-solid fa-arrow-right"></i></button>
+        </div>
+    </div>
+
+    <!-- ================= PAGE 2 ================= -->
+    <div id="page2" class="page-section">
+        <h2>Relation entre la vitesse linéaire et la vitesse angulaire</h2>
+        
+        <!-- Image 2 في الصفحة الثانية -->
+        <div class="image-card">
+            <img src="image2.jpg" alt="Vitesse linéaire et angulaire - Page 2">
+            <div class="image-caption">Tableaux récapitulatifs et formules</div>
+        </div>
+
+        <table>
+            <tr>
+                <th>Vitesse linéaire</th>
+                <th>Vitesse angulaire</th>
+            </tr>
+            <tr>
+                <td><div class="formula-box" onclick="toggleHighlight(this)" style="border:none; margin:0; font-size:20px;">\(v = \frac{\Delta S}{\Delta t}\)</div></td>
+                <td><div class="formula-box" onclick="toggleHighlight(this)" style="border:none; margin:0; font-size:20px;">\(\omega = \frac{\Delta\theta}{\Delta t}\)</div></td>
+            </tr>
+        </table>
+        
+        <h3 style="text-align:center;">Relation entre la vitesse linéaire et la vitesse angulaire</h3>
+        <div style="text-align:center;"><div class="formula-box" onclick="toggleHighlight(this)">\(v = R \cdot \omega\)</div></div>
+        <p style="text-align:center; font-size:18px;">Unités : \(v\) en (\(m \cdot s^{-1}\)), \(\omega\) en (\(rad \cdot s^{-1}\)), \(R\) en (m)</p>
+
+        <!-- Image 3 في الصفحة الثانية -->
+        <div class="image-card">
+            <img src="image3.jpg" alt="Illustration supplémentaire - Page 2">
+            <div class="image-caption">Illustration complémentaire de la vitesse linéaire et angulaire</div>
+        </div>
+
+        <h3>• La période et la fréquence</h3>
+        <p style="font-size: 18px;"><strong>Période (T) :</strong> Temps d'un tour complet (en secondes).</p>
+        <div><div class="formula-box" onclick="toggleHighlight(this)">\(T = \frac{2\pi}{\omega}\)</div></div>
+        
+        <p style="font-size: 18px; margin-top:15px;"><strong>Fréquence (N) :</strong> Nombre de tours par seconde (en Hz).</p>
+        <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+            <div class="formula-box" onclick="toggleHighlight(this)">\(N = \frac{1}{T}\)</div>
+            <div class="formula-box" onclick="toggleHighlight(this)">\(N = \frac{\omega}{2\pi}\)</div>
+            <div class="formula-box" onclick="toggleHighlight(this)">\(N = \frac{n}{\Delta t}\)</div>
+        </div>
+
+        <h3>• n : Nombre de tours</h3>
+        <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+            <div class="formula-box" onclick="toggleHighlight(this)">\(n = \frac{\Delta t}{T}\)</div>
+            <div class="formula-box" onclick="toggleHighlight(this)">\(\Delta\theta = 2\pi n\)</div>
+        </div>
+
+        <h3>• Équation horaire du mouvement :</h3>
+        <table>
+            <tr>
+                <th>Equation horaire en fonction \(\theta(t)\)</th>
+                <th>Equation horaire en fonction \(S(t)\)</th>
+            </tr>
+            <tr>
+                <td><div class="formula-box" onclick="toggleHighlight(this)" style="border:none; font-size:20px;">\(\theta(t) = \omega t + \theta_0\)</div><br><small style="font-size:16px;">Où \(\theta_0\) est l'abscisse angulaire à t = 0s</small></td>
+                <td><div class="formula-box" onclick="toggleHighlight(this)" style="border:none; font-size:20px;">\(S(t) = Vt + S_0\)</div><br><small style="font-size:16px;">Où \(S_0\) est l'abscisse curviligne à t = 0s</small></td>
+            </tr>
+        </table>
+
+        <div class="nav-buttons">
+            <button class="btn" onclick="changePage(1)"><i class="fa-solid fa-arrow-left"></i> Page Précédente</button>
+            <button class="btn" onclick="changePage(3)">Page Suivante <i class="fa-solid fa-arrow-right"></i></button>
+        </div>
+    </div>
+
+    <!-- ================= PAGE 3 ================= -->
+    <div id="page3" class="page-section">
+        <h2>Résumé et Exploitation des Graphes</h2>
+
+        <!-- Image 4 في الصفحة الثالثة -->
+        <div class="image-card">
+            <img src="image4.jpg" alt="Graphes et résumé - Page 3">
+            <div class="image-caption">Graphes de l'équation horaire et résumé général des formules</div>
+        </div>
+
+        <!-- Graphs Section -->
+        <div class="graphs-section">
+            <div class="graph-box">
+                <h3 style="background:#e0f2fe; padding:10px; border-radius:6px; font-size:18px;">\(\theta(t) = \omega t + \theta_0\)</h3>
+                <div class="formula-box" onclick="toggleHighlight(this)" style="font-size:18px; margin:8px; padding:12px 16px;">\(\omega = \frac{\theta_B - \theta_A}{t_B - t_A}\)</div>
+                <div class="formula-box" onclick="toggleHighlight(this)" style="font-size:18px; margin:8px; padding:12px 16px;">\(\omega = \frac{\theta_A - \theta_B}{t_A - t_B}\)</div>
+            </div>
+            <div class="graph-box">
+                <h3 style="background:#e0f2fe; padding:10px; border-radius:6px; font-size:18px;">\(S(t) = vt + S_0\)</h3>
+                <div class="formula-box" onclick="toggleHighlight(this)" style="font-size:18px; margin:8px; padding:12px 16px;">\(V = \frac{S_B - S_A}{t_B - t_A}\)</div>
+                <div class="formula-box" onclick="toggleHighlight(this)" style="font-size:18px; margin:8px; padding:12px 16px;">\(V = \frac{S_A - S_B}{t_A - t_B}\)</div>
+            </div>
+        </div>
+
+        <!-- Summary Table -->
+        <table class="summary-table">
+            <tr>
+                <td onclick="toggleCell(this)">\(S = R \cdot \theta\)</td>
+                <td onclick="toggleCell(this)">\(\omega = \frac{\Delta\theta}{\Delta t}\)</td>
+                <td onclick="toggleCell(this)">\(\Delta\theta = 2\pi n\)</td>
+                <td onclick="toggleCell(this)">\(n = \frac{\Delta t}{T}\)</td>
+                <td onclick="toggleCell(this)">\(N = \frac{n}{\Delta t}\)</td>
+            </tr>
+            <tr>
+                <td onclick="toggleCell(this)">\(v = \frac{\Delta S}{\Delta t}\)</td>
+                <td onclick="toggleCell(this)">\(v = R \cdot \omega\)</td>
+                <td onclick="toggleCell(this)">\(T = \frac{2\pi}{\omega}\)</td>
+                <td onclick="toggleCell(this)">\(N = \frac{1}{T}\)</td>
+                <td onclick="toggleCell(this)">\(N = \frac{\omega}{2\pi}\)</td>
+            </tr>
+            <tr>
+                <td onclick="toggleCell(this)">\(\theta(t) = \omega t + \theta_0\)</td>
+                <td onclick="toggleCell(this)">\(S(t) = Vt + S_0\)</td>
+                <td colspan="3" style="background:#f8fafc; cursor:default;"></td>
+            </tr>
+        </table>
+
+        <div class="nav-buttons">
+            <button class="btn" onclick="changePage(2)"><i class="fa-solid fa-arrow-left"></i> Page Précédente</button>
+        </div>
+    </div>
+
+</div>
+
+<!-- Interactive WhatsApp Floating Button -->
+<a href="https://wa.me/212661094946?text=Salam,%203afak%20bghit%20nstfsar%203la%20dars%20dyal%20rotation" class="whatsapp-float" target="_blank" title="Contactez-moi sur WhatsApp">
+    <i class="fa-brands fa-whatsapp"></i>
+</a>
+
+<!-- JavaScript for interactive features -->
+<script>
+    function changePage(pageNum) {
+        const sections = document.querySelectorAll('.page-section');
+        sections.forEach(sec => sec.classList.remove('active'));
+        document.getElementById('page' + pageNum).classList.add('active');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        if (window.MathJax) {
+            MathJax.typeset();
+        }
+    }
+
+    function toggleHighlight(element) {
+        element.classList.toggle('highlight');
+    }
+
+    function toggleCell(cell) {
+        if(cell.style.backgroundColor === 'rgb(209, 231, 225)') {
+            cell.style.backgroundColor = '#fff';
+            cell.style.color = '#333';
+        } else {
+            cell.style.backgroundColor = '#d1e7dd';
+            cell.style.color = '#0f5132';
+        }
+    }
+</script>
+
+</body>
+</html>
